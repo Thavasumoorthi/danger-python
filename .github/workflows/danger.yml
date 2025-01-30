@@ -24,7 +24,12 @@ jobs:
       - name: Install Dependencies
         run: pip install danger-python
 
-      - name: Run Danger Python
+      - name: Run Danger JS (Generates JSON)
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: danger-python run
+        run: danger ci --json > danger_output.json
+
+      - name: Run Danger Python (Uses JSON)
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: danger-python run --json danger_output.json
