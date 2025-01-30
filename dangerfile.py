@@ -1,9 +1,13 @@
-from danger_python.danger import danger
+# Dangerfile.py
+from danger import Danger, fail, warn, message
 
-# Check if PR title is too short
-if len(danger.github.pr_title) < 10:
-    danger.fail("❌ PR title is too short! Must be at least 10 characters.")
+danger = Danger()
 
-# Check if PR has a description
-if not danger.github.pr_body:
-    danger.warn("⚠️ PR description is missing. Please add a meaningful description.")
+# Example: Check for new files > 1KB
+for file in danger.git.created_files:
+    if danger.utils.file_size(file) > 1000:
+        fail(f"Large file detected: {file} (>1KB)")
+
+# Example: Warn if PR has no description
+if not danger.github.pr.body:
+    warn("Please add a description to this PR")

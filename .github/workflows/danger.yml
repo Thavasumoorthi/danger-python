@@ -1,9 +1,9 @@
-name: Danger-python action
+name: Danger
 
 on:
   pull_request:
-  push:
-    branches:  master
+    branches:
+       -master
 
 jobs:
   danger:
@@ -12,21 +12,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Python (optional)
+      - name: Setup Python
         uses: actions/setup-python@v5
-        if: false  # Disabled by default, enable if you need Python for Danger checks
         with:
           python-version: '3.x'
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install Danger.js
-        run: npm install --save-dev danger
+      - name: Install danger-python
+        run: pip install danger
 
       - name: Run Danger
-        run: npx danger ci
+        run: danger ci
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
