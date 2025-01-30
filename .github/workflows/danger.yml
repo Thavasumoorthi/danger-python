@@ -1,15 +1,17 @@
 name: Danger Python
 
-on: pull_request
+on:
+  pull_request:
     branches:
-      - master
+      - master  # Runs only when a PR targets the master branch
 
 jobs:
   danger:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # Clones the repo
 
       - name: Setup Python
         uses: actions/setup-python@v5
