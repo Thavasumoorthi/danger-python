@@ -1,26 +1,26 @@
-name: Danger Python
+name: Danger
 
-on: pull_request
+on:
+  pull_request:
     branches:
-      - master
+       -master
 
 jobs:
   danger:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.9"
+          python-version: '3.x'
 
-      - name: Install Dependencies
-        run: |
-          pip install danger-python
+      - name: Install danger-python
+        run: pip install danger
 
       - name: Run Danger
+        run: danger ci
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: danger-python ci
