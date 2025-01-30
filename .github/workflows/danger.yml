@@ -13,6 +13,11 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4  # Clones the repo
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -21,8 +26,14 @@ jobs:
       - name: Install Danger JS (Required for Danger Python)
         run: npm install -g danger
 
-      - name: Install Dependencies
+      - name: Verify Danger JS Installation
+        run: danger --version  # Checks if Danger JS is installed correctly
+
+      - name: Install Python Dependencies
         run: pip install danger-python
+
+      - name: Debug Environment Variables
+        run: env  # Prints environment variables to debug issues
 
       - name: Run Danger JS (Generates JSON)
         env:
