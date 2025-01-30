@@ -1,31 +1,32 @@
-name: Danger
+name: Danger-python action
 
 on:
   pull_request:
-    branches:
-      - master
-
+  push:
+    branches:  master
 
 jobs:
-  build:
+  danger:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.9'
+      - name: Setup Python (optional)
+        uses: actions/setup-python@v5
+        if: false  # Disabled by default, enable if you need Python for Danger checks
+        with:
+          python-version: '3.x'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install danger-python
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-    - name: Run Danger
-      run: |
-        danger-python ci
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Install Danger.js
+        run: npm install --save-dev danger
+
+      - name: Run Danger
+        run: npx danger ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
