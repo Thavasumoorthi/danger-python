@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: "3.9"
 
-      - name: Install Danger JS (Required for Danger Python)
+      - name: Install Danger JS
         run: npm install -g danger
 
       - name: Verify Danger JS Installation
@@ -31,9 +31,6 @@ jobs:
 
       - name: Install Python Dependencies
         run: pip install danger-python
-
-      - name: Debug Environment Variables
-        run: env  # Prints environment variables to debug issues
 
       - name: Run Danger JS (Generates JSON)
         env:
