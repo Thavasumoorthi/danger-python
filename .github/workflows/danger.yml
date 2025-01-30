@@ -18,11 +18,13 @@ jobs:
         with:
           python-version: "3.9"
 
-      - name: Install Dependencies
-        run: |
-          pip install danger-python
+      - name: Install Danger JS (Required for Danger Python)
+        run: npm install -g danger
 
-      - name: Run Danger
+      - name: Install Dependencies
+        run: pip install danger-python
+
+      - name: Run Danger Python
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: danger-python ci
