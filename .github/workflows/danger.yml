@@ -1,9 +1,9 @@
-name: Danger Python
+name: Danger Python CI
 
 on:
   pull_request:
     branches:
-      - master  # Runs only when a PR targets the master branch
+      - master
 
 jobs:
   danger:
@@ -11,33 +11,30 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4  # Clones the repo
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: '18'  # Use a supported version of Node.js
+
+      - name: Install Danger JS
+        run: npm install -g danger  # Install danger-js globally
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.9"
-
-      - name: Install Danger JS
-        run: npm install -g danger
-
-      - name: Verify Danger JS Installation
-        run: danger --version  # Checks if Danger JS is installed correctly
+          python-version: '3.9'
 
       - name: Install Python Dependencies
         run: pip install danger-python
 
-      - name: Run Danger JS (Generates JSON)
+      - name: Run Danger Python
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: danger ci --json > danger_output.json
+        run: danger-python ci  # Run danger-python CI
 
-      - name: Run Danger Python (Uses JSON)
+      - name: Run Danger Python (if JSON output needed)
         env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: danger-python run --json danger_output.json
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: danger-python ci --json > danger_output.json
