@@ -1,13 +1,17 @@
-# Dangerfile.py
-from danger import Danger, fail, warn, message
+from danger import danger, fail, warn, message
 
-danger = Danger()
-
-# Example: Check for new files > 1KB
-for file in danger.git.created_files:
-    if danger.utils.file_size(file) > 1000:
-        fail(f"Large file detected: {file} (>1KB)")
-
-# Example: Warn if PR has no description
+# Example check for PR description
 if not danger.github.pr.body:
-    warn("Please add a description to this PR")
+    fail("❌ Please add a description to your PR.")
+
+# Example check if PR adds more than 500 lines of code
+if danger.github.pr.additions > 500:
+    warn("⚠️ Big PR detected. Consider splitting it into smaller parts.")
+
+# Example: Find TODO comments in Python files
+for file in danger.git.modified_files:
+    if file.endswith(".py"):
+        with open(file, 'r') as f:
+            content = f.read()
+            if "TODO" in content:
+                message(f"📝 Found TODO in `{file}`")
