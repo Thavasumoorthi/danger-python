@@ -2,7 +2,7 @@ from danger_python import Danger, markdown
 
 danger = Danger()
 
-# Get the PR title
+# Get the PR titles
 title = danger.github.pr.title
 markdown(f"PR Title: {title}")
 
