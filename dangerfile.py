@@ -1,17 +1,23 @@
-from danger import danger, fail, warn, message
+from danger_python import Danger, markdown
 
-# Example check for PR description
-if not danger.github.pr.body:
-    fail("❌ Please add a description to your PR.")
+danger = Danger()
 
-# Example check if PR adds more than 500 lines of code
-if danger.github.pr.additions > 500:
-    warn("⚠️ Big PR detected. Consider splitting it into smaller parts.")
+# Get the PR title
+title = danger.github.pr.title
+markdown(f"PR Title: {title}")
 
-# Example: Find TODO comments in Python files
-for file in danger.git.modified_files:
-    if file.endswith(".py"):
-        with open(file, 'r') as f:
-            content = f.read()
-            if "TODO" in content:
-                message(f"📝 Found TODO in `{file}`")
+# Check if any files contain 'TODO'
+todo_files = []
+
+# Loop through changed files and check for 'TODO'
+for file in danger.github.pr.changed_files:
+    if 'TODO' in file.content:
+        todo_files.append(file.filename)
+
+# Display a warning if any TODOs are found
+if todo_files:
+    markdown("⚠️ Files with 'TODO' found:")
+    for file in todo_files:
+        markdown(f"- {file}")
+else:
+    markdown("✅ No TODOs found in the changed files.")
