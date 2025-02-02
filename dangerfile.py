@@ -1,6 +1,6 @@
-from danger_python import Danger, markdown
+from danger_python import danger, markdown
 
-danger = Danger()
+
 
 # Get the PR titles
 title = danger.github.pr.title
